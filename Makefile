@@ -65,7 +65,7 @@ BLADE_OPERATOR_PROJECT=https://github.com/chaosblade-io/chaosblade-operator.git
 BLADE_OPERATOR_BRANCH=master
 
 # chaosblade-exec-jvm
-BLADE_EXEC_JVM_PROJECT=https://github.com/chaosblade-io/chaosblade-exec-jvm.git
+BLADE_EXEC_JVM_PROJECT=https://git.woa.com/vb-chaos/vb-chaos-exec-jvm.git
 BLADE_EXEC_JVM_BRANCH=master
 
 # chaosblade-exec-cplus
