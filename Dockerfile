@@ -1,12 +1,14 @@
 FROM golang:1.14.0 AS builder
 LABEL maintainer="Changjun Xiao, Ming Cheng"
 
-ARG BLADE_VERSION=0.0.1
+ARG BLADE_VERSION=1.7.1
 ARG MUSL_VERSION=1.2.0
 
 # Using 163 mirror for Debian Strech
 RUN sed -i 's/deb.debian.org/mirrors.163.com/g' /etc/apt/sources.list
 RUN apt-get update && apt-get install unzip
+RUN apt-get install maven -y
+RUN mvn -v
 
 # # The image is used to build chaosblade for musl
 RUN wget http://www.musl-libc.org/releases/musl-${MUSL_VERSION}.tar.gz \
@@ -31,7 +33,7 @@ COPY . ${BLADE_BUILD_PATH}
 WORKDIR ${BLADE_BUILD_PATH}
 RUN make clean && \
   go mod vendor && \
-  env GO111MODULE=on GO15VENDOREXPERIMENT=1 make && \
+  env GO111MODULE=on GO15VENDOREXPERIMENT=1 make build && \
   mv -f ${BLADE_BUILD_PATH}/target/chaosblade-${BLADE_VERSION} /usr/local/chaosblade
 
 # Stage2
@@ -50,4 +52,4 @@ COPY --from=builder ${CHAOSBLADE_HOME} ${CHAOSBLADE_HOME}
 WORKDIR ${CHAOSBLADE_HOME}
 ENV PATH ${CHAOSBLADE_HOME}:${PATH}
 
-CMD ["blade"]
+CMD ["blade", "server", "start"]
